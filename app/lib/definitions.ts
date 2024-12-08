@@ -4,32 +4,40 @@
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 export type User = {
   id: string;
-  name: string;
-  email: string;
+  username: string;
   password: string;
 };
 
-export type Customer = {
+export type Agent = {
+  id: string;
+  agent: string;
+};
+
+export type Item = {
+  id: string;
+  itemName: string;
+  unitPrice: number;
+  currentVolumne: number;
+};
+
+export type SpendReceive = {
   id: string;
   name: string;
-  email: string;
-  image_url: string;
-};
-
-export type Invoice = {
-  id: string;
-  customer_id: string;
+  categoryId: string;
+  agentId: string;
+  spend: boolean;
   amount: number;
-  date: string;
-  // In TypeScript, this is called a string union type.
-  // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
-  status: 'pending' | 'paid';
+  createdDate: string;
 };
 
-export type Revenue = {
-  month: string;
-  revenue: number;
-};
+export type ItemHistory = {
+  id: string;
+  itemId: string;
+  agentId: string;
+  volume: number;
+  spend: boolean;
+  createdDate: string;
+}
 
 export type LatestInvoice = {
   id: string;
