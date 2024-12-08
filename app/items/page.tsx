@@ -23,7 +23,8 @@ export default async function Page(props: {
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="Tìm kiếm..." />
-                <CreateInvoice />
+                {/*<CreateInvoice />*/}
+                <p className="bg-green-400">Tạo</p>
             </div>
 
             <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
