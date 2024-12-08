@@ -15,9 +15,9 @@ export type Agent = {
 
 export type Item = {
   id: string;
-  itemName: string;
-  unitPrice: number;
-  currentVolume: number;
+  itemname: string;
+  unitprice: number;
+  currentvolume: number;
 };
 
 export type SpendReceive = {
