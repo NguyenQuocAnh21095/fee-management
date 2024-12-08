@@ -1,147 +1,119 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
+// import {ItemHistory} from "@/app/lib/definitions";
+
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
-    password: '123456',
+    username: 'anh',
+    password: '123123',
   },
 ];
 
-const customers = [
+const agents = [
   {
     id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png',
+    agent: 'Agent 1',
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png',
+    agent: 'Agent 2',
+  },
+];
+
+const items = [
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6112b',
+    itemName: 'Nước giặt 1',
+    unitPrice: 50000,
+    currentVolume: 10,
+  },
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6112c',
+    itemName: 'Nước giặt 2',
+    unitPrice: 55000,
+    currentVolume: 15,
+  },
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6112d',
+    itemName: 'Nước giặt 3',
+    unitPrice: 53000,
+    currentVolume: 11,
+  },
+];
+
+const spendreceive = [
+  {
+    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd65yt',
+    name: 'Lan ứng tiền',
+    categoryId: 'Cat1',
+    agentId: agents[0].id,
+    spend: true,
+    amount: 200000,
+    createdDate: '2024-10-09',
   },
   {
     id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png',
+    name: 'Nạp tiền',
+    categoryId: 'Cat2',
+    agentId: agents[1].id,
+    spend: true,
+    amount: 300000,
+    createdDate: '2024-12-02',
   },
   {
     id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png',
+    name: 'Trả lương Hồng',
+    categoryId: 'Cat1',
+    agentId: agents[0].id,
+    spend: true,
+    amount: 400000,
+    createdDate: '2024-10-10',
   },
   {
-    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
-    name: 'Amy Burns',
-    email: 'amy@burns.com',
-    image_url: '/customers/amy-burns.png',
-  },
-  {
-    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
-    name: 'Balazs Orban',
-    email: 'balazs@orban.com',
-    image_url: '/customers/balazs-orban.png',
+    id: '3958dc9e-712f-4377-85e9-fec4b6a9756h',
+    name: 'Nạp tiền',
+    categoryId: 'Cat2',
+    agentId: agents[1].id,
+    spend: false,
+    amount: 500000,
+    createdDate: '2024-12-03',
   },
 ];
 
-const invoices = [
+const itemHistory = [
   {
-    customer_id: customers[0].id,
-    amount: 15795,
-    status: 'pending',
-    date: '2022-12-06',
+    id:	'3958dc9e-712f-4377-85e9-fec4b6a6112i',
+    // itemId: items[0].id,
+    // agentId: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
+    volume: 10,
+    spend: true,
+    createdDate:'2024-10-09',
   },
   {
-    customer_id: customers[1].id,
-    amount: 20348,
-    status: 'pending',
-    date: '2022-11-14',
+    id:	'3958dc9e-712f-4377-85e9-fec4b6a6112k',
+    // itemId: items[1].id,
+    // agentId: agents[1].id,
+    volume: 15,
+    spend: true,
+    createdDate:'2024-11-01',
   },
   {
-    customer_id: customers[4].id,
-    amount: 3040,
-    status: 'paid',
-    date: '2022-10-29',
+    id:	'3958dc9e-712f-4377-85e9-fec4b6a6112l',
+    // itemId: items[1].id,
+    // agentId: agents[0].id,
+    volume: 4,
+    spend: false,
+    createdDate:'2024-11-10',
   },
   {
-    customer_id: customers[3].id,
-    amount: 44800,
-    status: 'paid',
-    date: '2023-09-10',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 34577,
-    status: 'pending',
-    date: '2023-08-05',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 54246,
-    status: 'pending',
-    date: '2023-07-16',
-  },
-  {
-    customer_id: customers[0].id,
-    amount: 666,
-    status: 'pending',
-    date: '2023-06-27',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 32545,
-    status: 'paid',
-    date: '2023-06-09',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 1250,
-    status: 'paid',
-    date: '2023-06-17',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8546,
-    status: 'paid',
-    date: '2023-06-07',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 500,
-    status: 'paid',
-    date: '2023-08-19',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-03',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 1000,
-    status: 'paid',
-    date: '2022-06-05',
+    id:	'3958dc9e-712f-4377-85e9-fec4b6a6112m',
+    // itemId: items[0].id,
+    // agentId: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
+    volume: 7,
+    spend: false,
+    createdDate:'2024-12-02',
   },
 ];
 
-const revenue = [
-  { month: 'Jan', revenue: 2000 },
-  { month: 'Feb', revenue: 1800 },
-  { month: 'Mar', revenue: 2200 },
-  { month: 'Apr', revenue: 2500 },
-  { month: 'May', revenue: 2300 },
-  { month: 'Jun', revenue: 3200 },
-  { month: 'Jul', revenue: 3500 },
-  { month: 'Aug', revenue: 3700 },
-  { month: 'Sep', revenue: 2500 },
-  { month: 'Oct', revenue: 2800 },
-  { month: 'Nov', revenue: 3000 },
-  { month: 'Dec', revenue: 4800 },
-];
-
-export { users, customers, invoices, revenue };
+export { users, items, agents, itemHistory, spendreceive };

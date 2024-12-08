@@ -5,10 +5,26 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
+  Item
 } from './definitions';
+
 import { formatCurrency } from './utils';
 
+export async function  fetchItems() {
+  try {
+    const items = await sql<Item>`
+      SELECT items.id, items.itemname, items.unitprice, items.currentvolume 
+      FROM items
+      ORDER BY items.itemname
+      LIMIT 5
+    `;
+
+    return items.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Lấy dữ liệu thất bại');
+  }
+}
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
@@ -212,6 +228,6 @@ export async function fetchFilteredCustomers(query: string) {
     return customers;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+    throw new Error('Failed to fetch customer table.tsx.');
   }
 }

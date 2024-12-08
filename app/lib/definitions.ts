@@ -17,7 +17,7 @@ export type Item = {
   id: string;
   itemName: string;
   unitPrice: number;
-  currentVolumne: number;
+  currentVolume: number;
 };
 
 export type SpendReceive = {

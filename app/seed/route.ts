@@ -1,105 +1,129 @@
-// import bcrypt from 'bcrypt';
-// import { db } from '@vercel/postgres';
-// import { invoices, customers, revenue, users } from '../lib/placeholder-data';
+import bcrypt from 'bcrypt';
+import { db } from '@vercel/postgres';
+import { users, agents, itemHistory, spendreceive, items } from '../lib/placeholder-data';
 
-// const client = await db.connect();
+const client = await db.connect();
 
-// async function seedUsers() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS users (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       name VARCHAR(255) NOT NULL,
-//       email TEXT NOT NULL UNIQUE,
-//       password TEXT NOT NULL
-//     );
-//   `;
+async function seedUsers() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      username VARCHAR(255) NOT NULL UNIQUE,
+      password TEXT NOT NULL
+    );
+  `;
 
-//   const insertedUsers = await Promise.all(
-//     users.map(async (user) => {
-//       const hashedPassword = await bcrypt.hash(user.password, 10);
-//       return client.sql`
-//         INSERT INTO users (id, name, email, password)
-//         VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
-//         ON CONFLICT (id) DO NOTHING;
-//       `;
-//     }),
-//   );
+  const insertedUsers = await Promise.all(
+    users.map(async (user) => {
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      return client.sql`
+        INSERT INTO users (id, username, password)
+        VALUES (${user.id}, ${user.username}, ${hashedPassword})
+        ON CONFLICT (id) DO NOTHING;
+      `;
+    }),
+  );
 
-//   return insertedUsers;
-// }
+  return insertedUsers;
+}
 
-// async function seedInvoices() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+async function seedAgents() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS agents (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      agent VARCHAR(255) NOT NULL UNIQUE
+    );
+  `;
 
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS invoices (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       customer_id UUID NOT NULL,
-//       amount INT NOT NULL,
-//       status VARCHAR(255) NOT NULL,
-//       date DATE NOT NULL
-//     );
-//   `;
+  const insertedAgents = await Promise.all(
+      agents.map(
+          (agent) => client.sql`
+          INSERT INTO agents (id, agent)
+          VALUES (${agent.id}, ${agent.agent})
+          ON CONFLICT (id) DO NOTHING;
+          `
+      )
+  );
 
-//   const insertedInvoices = await Promise.all(
-//     invoices.map(
-//       (invoice) => client.sql`
-//         INSERT INTO invoices (customer_id, amount, status, date)
-//         VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
-//         ON CONFLICT (id) DO NOTHING;
-//       `,
-//     ),
-//   );
+  return insertedAgents;
+}
 
-//   return insertedInvoices;
-// }
+async function seedItems() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-// async function seedCustomers() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS items (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      itemName VARCHAR(255) NOT NULL UNIQUE,
+      unitPrice INT NOT NULL,
+      currentVolume INT NOT NULL
+    );
+  `;
 
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS customers (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       name VARCHAR(255) NOT NULL,
-//       email VARCHAR(255) NOT NULL,
-//       image_url VARCHAR(255) NOT NULL
-//     );
-//   `;
+  const insertedItems = await Promise.all(
+    items.map(
+      (item) => client.sql`
+        INSERT INTO items (id, itemName, unitPrice, currentVolume)
+        VALUES (${item.id}, ${item.itemName}, ${item.unitPrice}, ${item.currentVolume})
+        ON CONFLICT (id) DO NOTHING;
+      `,
+    ),
+  );
 
-//   const insertedCustomers = await Promise.all(
-//     customers.map(
-//       (customer) => client.sql`
-//         INSERT INTO customers (id, name, email, image_url)
-//         VALUES (${customer.id}, ${customer.name}, ${customer.email}, ${customer.image_url})
-//         ON CONFLICT (id) DO NOTHING;
-//       `,
-//     ),
-//   );
+  return insertedItems;
+}
 
-//   return insertedCustomers;
-// }
+async function seedSpendReceive() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-// async function seedRevenue() {
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS revenue (
-//       month VARCHAR(4) NOT NULL UNIQUE,
-//       revenue INT NOT NULL
-//     );
-//   `;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS spendreceive (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      name TEXT NOT NULL,
+      categoryId VARCHAR(255) NOT NULL,
+      agentId UUID NOT NULL,
+      spend BOOLEAN NOT NULL,
+      amount INT NOT NULL,
+      createdDate DATE NOT NULL
+    );
+  `;
 
-//   const insertedRevenue = await Promise.all(
-//     revenue.map(
-//       (rev) => client.sql`
-//         INSERT INTO revenue (month, revenue)
-//         VALUES (${rev.month}, ${rev.revenue})
-//         ON CONFLICT (month) DO NOTHING;
-//       `,
-//     ),
-//   );
+  const insertedSpendReceive = await Promise.all(
+    spendreceive.map((item) => {
+      // Log giá trị của item để kiểm tra
+      console.log("Item details:", item);
+      return item; // Giữ nguyên item để tiếp tục insert
+    })
+  );
+  return insertedSpendReceive;
+}
 
-//   return insertedRevenue;
-// }
+async function seedItemHistory() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS itemhistory (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      itemId UUID NOT NULL,
+      agentId UUID NOT NULL,
+      volume INT NOT NULL,
+      spend BOOLEAN NOT NULL,
+      createdDate DATE NOT NULL
+    );
+  `;
+
+  const insertedItemHistory = await Promise.all(
+    itemHistory.map((item) => {
+      // Log giá trị của item để kiểm tra
+      console.log("Item details:", item);
+      return item; // Giữ nguyên item để tiếp tục insert
+    })
+  );
+
+  return insertedItemHistory;
+}
 
 export async function GET() {
   return Response.json({
@@ -108,12 +132,13 @@ export async function GET() {
   });
   // try {
   //   await client.sql`BEGIN`;
-  //   await seedUsers();
-  //   await seedCustomers();
-  //   await seedInvoices();
-  //   await seedRevenue();
+    // await seedUsers();
+    // await seedAgents();
+    // await seedItems();
+    // await seedSpendReceive();
+    // await seedItemHistory();
   //   await client.sql`COMMIT`;
-
+  //
   //   return Response.json({ message: 'Database seeded successfully' });
   // } catch (error) {
   //   await client.sql`ROLLBACK`;
