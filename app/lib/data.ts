@@ -5,16 +5,18 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Item
+  Item, ItemHistory
 } from './definitions';
 
 import { formatCurrency } from './utils';
 
-export async function  fetchItems() {
+export async function fetchItems(query:string) {
   try {
     const items = await sql<Item>`
       SELECT items.id, items.itemname, items.unitprice, items.currentvolume 
       FROM items
+      WHERE 
+        itemname ILIKE ${`%${query}%`}
       ORDER BY items.itemname
       LIMIT 5
     `;
@@ -25,6 +27,71 @@ export async function  fetchItems() {
     throw new Error('Lấy dữ liệu thất bại');
   }
 }
+
+export async function getOneItem(query:string) {
+  try {
+    const items = await sql<Item>`
+    SELECT items.id, items.itemname, items.unitprice, items.currentvolume 
+      FROM items
+      WHERE 
+        id = ${query}`;
+    return items.rows;
+  }
+ catch(error) {
+  console.error('Database Error:', error);
+  throw new Error('Lấy dữ liệu thất bại');
+  }
+}
+
+export async function fetchItemById(id: string) {
+  try {
+    const data = await sql<ItemHistory>`
+      SELECT
+        id,
+        itemid,
+        agentid,
+        volume,
+        spend,
+        createdDate
+       
+      FROM itemhistory
+      WHERE itemid = ${id}
+      ORDER BY createdDate DESC;
+    `;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Lấy dữ liệu chi tiết thất bại');
+  }
+}
+
+export async function fetchTotalInOut(id:string) {
+  try {
+    const inCountPromise = sql`SELECT COUNT(*) FROM itemhistory
+    WHERE itemid = ${id}
+    AND spend = true`;
+    const outCountPromise = sql`SELECT COUNT(*) FROM itemhistory
+    WHERE itemid = ${id}
+    AND spend = false`;
+
+    const data = await Promise.all([
+      inCountPromise,
+      outCountPromise,
+    ]);
+
+    const numberOfIn = Number(data[0].rows[0].count ?? '0');
+    const numberOfOut = Number(data[1].rows[0].count ?? '0');
+
+    return {
+      numberOfIn,
+      numberOfOut,
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch in out item.');
+  }
+}
+
 // export async function fetchRevenue() {
 //   try {
     // Artificially delay a response for demo purposes.

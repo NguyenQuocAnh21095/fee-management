@@ -32,11 +32,11 @@ export type SpendReceive = {
 
 export type ItemHistory = {
   id: string;
-  itemId: string;
-  agentId: string;
+  itemid: string;
+  agentid: string;
   volume: number;
   spend: boolean;
-  createdDate: string;
+  createddate: string;
 }
 
 export type LatestInvoice = {

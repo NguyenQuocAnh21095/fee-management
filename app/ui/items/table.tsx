@@ -1,19 +1,21 @@
 import { fetchItems } from '@/app/lib/data';
 import { Item } from '@/app/lib/definitions'
+import Link from "next/link";
 
-export default async function ItemsTable(){
-  const items: Item[] = await fetchItems();
-  // console.log(items);
+export default async function ItemsTable({query}:{query:string}) {
+  const items: Item[] = await fetchItems(query);
 
   return (
       <div className="mt-4 border-gray-300">
           <ul className="space-y-2">
               {items?.map((item) => (
                   <li key={item.id} className="mt-2">
+                      <Link href={`/items/${item.id}/itemdetail`}>
                       <div className="mb-1 w-full rounded-md bg-green-400 pl-3 p-2">
                           <strong>{item.itemname}</strong> - Giá: {item.unitprice} VNĐ
                           <br/> SL: {item.currentvolume}
                       </div>
+                      </Link>
                   </li>
               ))}
           </ul>

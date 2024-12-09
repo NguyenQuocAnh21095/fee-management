@@ -8,18 +8,15 @@ export const formatCurrency = (amount: number) => {
 };
 
 export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = 'en-US',
+    dateStr: string,
+    locale: string = 'en-US',
 ) => {
   const date = new Date(dateStr);
-  const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  };
-  const formatter = new Intl.DateTimeFormat(locale, options);
-  return formatter.format(date);
-};
+  const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày, đảm bảo luôn 2 chữ số
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng (cộng thêm 1 vì getMonth trả về 0-11)
+  const year = date.getFullYear(); // Lấy năm
+  return `${day}/${month}/${year}`;
+}
 
 // export const generateYAxis = (revenue: Revenue[]) => {
 //   // Calculate what labels we need to display on the y-axis
