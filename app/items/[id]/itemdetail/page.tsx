@@ -35,7 +35,7 @@ export default async function Page (props: { params: Promise<{ id: string }> }) 
                 <button className='bg-red-500 p-2 rounded-md'>Xuất: {totalInOut.numberOfOut}<br/>TT: {totalOutAmount.toLocaleString()}</button>
             </div>
             {/*Filter*/}
-            <div className='bg-green-400 p-3 mt-4'>Nút filter theo calendar</div>
+            <div className='bg-blue-500 p-3 mt-4'>Nút filter theo calendar</div>
             {/*Danh sách lịch sử*/}
             <Suspense fallback={<InvoicesTableSkeleton />}>
                 {/*<Table query={query} currentPage={currentPage} />*/}
@@ -43,10 +43,14 @@ export default async function Page (props: { params: Promise<{ id: string }> }) 
                     <ul className="space-y-2">
                         {items?.map((item) => (
                             <li key={item.id} className="mt-2">
-                                <div className='bg-gray-100 px-3 rounded-md flex justify-between items-center'>
-                                    {item.spend === true ? 'Nhập' : 'Xuất'}
-                                    <div>SL: {item.volume} - TT:
-                                        <br/>Ngày {formatDateToLocal(item.createddate)}
+                                <div className={clsx(
+                                    "bg-gray-100 px-3 rounded-md flex justify-between items-center",
+                                    item.spend ? "bg-green-400" : "bg-red-500"
+                                )}
+                                >
+                                    {item.spend === true ? 'Nhập' : 'Xuất'}<br/>Ngày {formatDateToLocal(item.createddate)}
+                                    <div>SL: {item.volume}<br/>TT: {(oneItem?.[0]?.unitprice*item.volume).toLocaleString()}
+
                                     </div>
                                 </div>
                             </li>

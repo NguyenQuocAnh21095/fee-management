@@ -67,10 +67,10 @@ export async function fetchItemById(id: string) {
 
 export async function fetchTotalInOut(id:string) {
   try {
-    const inCountPromise = sql`SELECT COUNT(*) FROM itemhistory
+    const inCountPromise = sql`SELECT SUM(volume) FROM itemhistory
     WHERE itemid = ${id}
     AND spend = true`;
-    const outCountPromise = sql`SELECT COUNT(*) FROM itemhistory
+    const outCountPromise = sql`SELECT SUM(volume) FROM itemhistory
     WHERE itemid = ${id}
     AND spend = false`;
 
@@ -79,8 +79,8 @@ export async function fetchTotalInOut(id:string) {
       outCountPromise,
     ]);
 
-    const numberOfIn = Number(data[0].rows[0].count ?? '0');
-    const numberOfOut = Number(data[1].rows[0].count ?? '0');
+    const numberOfIn = Number(data[0].rows[0].sum ?? '0');
+    const numberOfOut = Number(data[1].rows[0].sum ?? '0');
 
     return {
       numberOfIn,
